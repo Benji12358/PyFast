@@ -1246,7 +1246,7 @@ class CFD_stats:
         write_stats(self.ww_budget, current_path_postProcess, current_iteration, mesh.ny)
         
          
-    def compute_transport_equation_terms_temperature(self, settings:Settings, mesh:CFD_mesh:
+    def compute_transport_equation_terms_temperature(self, settings:Settings, mesh:CFD_mesh):
         """Compute temperature budget (1D numpy array with shape (ny)) of the flow in the spot.
         
         Parameters

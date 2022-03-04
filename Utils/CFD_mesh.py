@@ -50,14 +50,14 @@ class CFD_mesh:
             self.nx = self.nx*2
             self.nz = self.nz*2
 
-        self.X=np.linspace(0,settings.L1,self.nx+1) # spanwise coordinates          
-        self.Z=np.linspace(0,settings.L3,self.nz+1) # streamwise coordinates
+        self.X=np.linspace(0,settings.Lx,self.nx+1) # spanwise coordinates          
+        self.Z=np.linspace(0,settings.Lz,self.nz+1) # streamwise coordinates
          
-        self.xstep = settings.L1/self.nx
-        self.zstep = settings.L3/self.nz
+        self.xstep = settings.Lx/self.nx
+        self.zstep = settings.Lz/self.nz
 
-        self.Xc = np.linspace(self.xstep/2,settings.L1-self.xstep/2,self.nx)
-        self.Zc = np.linspace(self.zstep/2,settings.L3-self.zstep/2,self.nz)
+        self.Xc = np.linspace(self.xstep/2,settings.Lx-self.xstep/2,self.nx)
+        self.Zc = np.linspace(self.zstep/2,settings.Lz-self.zstep/2,self.nz)
 
         # Wall-normal coordinates
         file = settings.root + '/' + settings.mean_path + '/' + settings.mean_path + '/Log/Mesh_generator/Y/ymesh.out'
