@@ -43,7 +43,7 @@ def main():
         
     if (compute_stats):
     
-        """Compute the time-averaged statistics"""
+        """Compute the time-averaged mean fields"""
         sim_environment.compute_mean_fields(settings, mesh)
         
         print("Fields averaged!")
