@@ -15,6 +15,8 @@ import numpy as np
 import h5py
 from Settings import Settings
 
+from utilities import find_nearest
+
 class CFD_mesh:
     
     def __init__(self, settings:Settings):
@@ -75,6 +77,10 @@ class CFD_mesh:
         self.Y[self.ny] = 2
 
         ##################
+        shift = settings.shift
+        settings.shift = find_nearest(self.Xc, shift)
+        self.Xc = self.Xc + shift
+
         self.XY,self.YX = np.meshgrid(self.Xc,self.Yc)
         self.XZ,self.ZX = np.meshgrid(self.Xc,self.Zc-self.Zc[self.nz//2])
         self.ZY,self.YZ = np.meshgrid(self.Zc-self.Zc[self.nz//2],self.Yc)

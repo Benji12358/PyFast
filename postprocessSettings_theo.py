@@ -62,7 +62,7 @@ compute_E_tot_evolution = False                                                 
 ################       CLASSIC PLOT INFOS           ###############
 ###################################################################
 
-shift = 77.5                                                                                # Shift in the streamwise direction for better looking plot (mostly used in transitional flows)
+shift = 0                                                                                # Shift in the streamwise direction for better looking plot (mostly used in transitional flows)
 
 
 ################ 3D PLOTTING

@@ -368,6 +368,35 @@ class CFD_stats:
             self.tt_budget['Production'] = self.tt_budget['Production']/len(settings.all_iterations)
             self.tt_budget['Molecular diffusion'] = self.tt_budget['Molecular diffusion']/len(settings.all_iterations)
             self.tt_budget['Dissipation'] = self.tt_budget['Dissipation']/len(settings.all_iterations)
+
+
+    def shift_fields_in_x(self, settings:Settings, mesh:CFD_mesh):
+        """Shift instantaneous fields in x direction
+        
+        Parameters
+        ----------
+        settings : Settings
+            Settings of the simulation
+        mesh : CFD_mesh
+            Mesh of the simulation that will be written
+    
+        Returns
+        -------
+        CFD_stats
+            An object containing main variables (U,V,W,P and T) of a simulation
+        """
+        
+        self.U.set_instantaneous(np.roll(self.U.instantaneous,-settings.shift,axis=-1))
+        self.V.set_instantaneous(np.roll(self.V.instantaneous,-settings.shift,axis=-1))
+        self.W.set_instantaneous(np.roll(self.W.instantaneous,-settings.shift,axis=-1))
+        self.P.set_instantaneous(np.roll(self.P.instantaneous,-settings.shift,axis=-1))
+
+        self.spot = np.roll(self.spot,-settings.shift,axis=-1)
+        
+        if (settings.get_T):
+            self.T.set_instantaneous(np.roll(self.T.instantaneous,-settings.shift,axis=-1))
+
+            self.thermal_spot = np.roll(self.thermal_spot,-settings.shift,axis=-1)
         
         
 

@@ -9,7 +9,7 @@ PyFast is Python tool environment developed to post-process MULTIFAST simulation
 
 ## Installation
 
-To use PyFast, you just need to clone this repository.
+To install PyFast, you just need to clone this repository.
 
 ## Usage
 

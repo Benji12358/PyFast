@@ -29,7 +29,7 @@ def main():
     global settings, mesh, sim_environment    
 
     """Read the settings define by the user, and build the mesh"""
-    settings = Settings("postprocessSettings_Benj")
+    settings = Settings("postprocessSettings_turb_transition")
     mesh = CFD_mesh(settings)
     
     """Initialize all variables of the simulation"""
@@ -105,6 +105,8 @@ def main():
             plot_stats_utils.read_and_plot_basic_temperature_stats(settings, mesh, t, plotWithTheo=True)
             plot_stats_utils.read_and_plot_temperature_budgets(settings, mesh, t, plotWithTheo=True)
     
+            sim_environment.shift_fields_in_x(settings, mesh)
+
             """Plot wall shear stress contours"""
             if (settings.plot_wall_shear_stress_contours):
                 

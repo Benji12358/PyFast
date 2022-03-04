@@ -200,7 +200,7 @@ def plot_2D_contours_with_spot(array2D, spot2D, mesh:CFD_mesh, settings:Settings
     fig = CFD_plot('full')
     fig.add_contourf(mesh.XZ,mesh.ZX,array2D, cmap='seismic')
     fig.add_contour(mesh.XZ,mesh.ZX,spot2D, cmap='binary', linewidths=2)
-    fig.chg_x_axis(r'$X$',axis_low_bound=0,axis_high_bound=settings.Lx)
+    fig.chg_x_axis(r'$X$',axis_low_bound=mesh.Xc[0],axis_high_bound=mesh.Xc[-1])
     fig.chg_y_axis(r'$Z$',axis_low_bound=0-settings.Lz/2,axis_high_bound=settings.Lz-settings.Lz/2)
     fig.custom_layout()
     fig.display()

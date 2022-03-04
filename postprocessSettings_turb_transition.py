@@ -93,7 +93,6 @@ colored_contours = False                                                        
 contours = True                                                                             # Flag if contours are plotted with lines
 
 
-
 ################ 1D PLOTTING
 plot_velocity_stats = True                                                                  # Flag if basic velocities stats are plotted
 plot_transport_equation_terms = True                                                        # Flag if budgets stats are plotted
