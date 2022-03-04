@@ -114,6 +114,7 @@ class Settings:
         self.Lz = Lz
         self.symmetry = symmetry
         self.delta_iteration = delta_iteration
+        self.streamwise = streamwise
 
         # initialize number of iterations
         self.preliminary_iterations = preliminary_iterations

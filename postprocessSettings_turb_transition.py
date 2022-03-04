@@ -14,6 +14,8 @@ Lz = 8*np.pi                                                                    
 symmetry = True                                                                             # Flag if the simulation can be considered symmetric in y-direction
 delta_iteration = 5                                                                         # Iteration step for statistics computation
 
+streamwise = 1                                                                         		# Specify the streamwise direction used in MULTIFAST
+
 preliminary_iterations = 10                                                                 # Number of preliminary iterations (by default set as start iteration)
 number_iteration = 175                                                                      # Total number of iterations 
 

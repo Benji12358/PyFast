@@ -29,7 +29,7 @@ from interpolation_schemes import D0s_DRP5_3Dz as interpolate_to_cc_z
 
 from derivative_schemes import D1_3Dy, D2_3Dy
 
-from utilities import createPostProcessingDirectory, find_nearest
+from utilities import createPostProcessingDirectory, find_nearest, read_h5_file
 from stats_utils import write_hdf5, write_xdmf
 
 from plot_utils import plot_2D_contours
@@ -417,31 +417,21 @@ class CFD_stats:
         mean_folder = settings.root + '/' + settings.current_path + '/' + settings.current_path + '/Results/3D/field' + str(settings.preliminary_iterations*1000)
 
         # U (streamwise velocity here)
-        fu = h5py.File(mean_folder + '/W.h5', 'r')
-        U_mean = np.array(fu['W'])[:-1,:-1,:-1]
-        fu.close()
+        U_mean = read_h5_file(mean_folder, 'W', settings.streamwise)
         # V
-        fv = h5py.File(mean_folder + '/V.h5', 'r')
-        V_mean = np.array(fv['V'])[:-1,:-1,:-1]
-        fv.close()
+        V_mean = read_h5_file(mean_folder, 'V', settings.streamwise)
         # U (spanwise velocity here)
-        fw = h5py.File(mean_folder + '/U.h5', 'r')
-        W_mean = np.array(fw['U'])[:-1,:-1,:-1]
-        fw.close()
+        W_mean = read_h5_file(mean_folder, 'U', settings.streamwise)
         # Pressure
-        fp = h5py.File(mean_folder + '/P.h5', 'r')
-        P_mean = np.array(fp['P'])[:-1,:-1,:-1]
-        fp.close()
+        P_mean = read_h5_file(mean_folder, 'P', settings.streamwise)
         
         # from staggered to cell center field
-        U_mean = interpolate_to_cc_x(U_mean)[:,:,:mesh.nx]
-        V_mean = interpolate_to_cc_y(V_mean)[:,:,:mesh.nx]
-        W_mean = interpolate_to_cc_z(W_mean)[:,:,:mesh.nx]
+        U_mean = interpolate_to_cc_x(U_mean)
+        V_mean = interpolate_to_cc_y(V_mean)
+        W_mean = interpolate_to_cc_z(W_mean)
         
         if (settings.get_T):
-            ft = h5py.File(mean_folder + '/sca1.h5', 'r')
-            T_mean = np.array(ft['sca1'])[:mesh.nz,:mesh.ny,:mesh.nx]
-            ft.close()
+            T_mean = read_h5_file(mean_folder, 'sca1', settings.streamwise)
         
         print(mean_folder)
         
@@ -522,21 +512,13 @@ class CFD_stats:
             mean_folder = settings.root + '/' + settings.current_path + '/' + settings.current_path + '/Results/3D/field' + str(i*1000)
     
             # U (streamwise velocity here)
-            fu = h5py.File(mean_folder + '/W.h5', 'r')
-            U_tmp = np.array(fu['W'])[:-1,:-1,:-1]
-            fu.close()
+            U_tmp = read_h5_file(mean_folder, 'W', settings.streamwise)
             # V
-            fv = h5py.File(mean_folder + '/V.h5', 'r')
-            V_tmp = np.array(fv['V'])[:-1,:-1,:-1]
-            fv.close()
+            V_tmp = read_h5_file(mean_folder, 'V', settings.streamwise)
             # U (spanwise velocity here)
-            fw = h5py.File(mean_folder + '/U.h5', 'r')
-            W_tmp = np.array(fw['U'])[:-1,:-1,:-1]
-            fw.close()
+            W_tmp = read_h5_file(mean_folder, 'U', settings.streamwise)
             # Pressure
-            fp = h5py.File(mean_folder + '/P.h5', 'r')
-            P_mean += np.array(fp['P'])[:-1,:-1,:-1]
-            fp.close()
+            P_tmp += read_h5_file(mean_folder, 'P', settings.streamwise)
             
             # from staggered to cell center field
             U_mean += interpolate_to_cc_x(U_tmp)[:,:,:mesh.nx]
@@ -544,9 +526,7 @@ class CFD_stats:
             W_mean += interpolate_to_cc_z(W_tmp)[:,:,:mesh.nx]
             
             if (settings.get_T):
-                ft = h5py.File(mean_folder + '/sca1.h5', 'r')
-                T_mean += np.array(ft['sca1'])[:mesh.nz,:mesh.ny,:mesh.nx]
-                ft.close()
+                T_mean += read_h5_file(mean_folder, 'sca1', settings.streamwise)
         
         self.U.set_mean(U_mean/len(settings.all_iterations))
         self.V.set_mean(V_mean/len(settings.all_iterations))
@@ -652,26 +632,16 @@ class CFD_stats:
         print(str(progress) + " %")
         
         # U (streamwise velocity here)
-        fu = h5py.File(results_path + '/W.h5', 'r')
-        U_instantaneous = np.array(fu['W'])[:-1,:-1,:-1]
-        fu.close()
+        U_instantaneous = read_h5_file(results_path, 'W', settings.streamwise)
         # V
-        fv = h5py.File(results_path + '/V.h5', 'r')
-        V_instantaneous = np.array(fv['V'])[:-1,:-1,:-1]
-        fv.close()
-        # W (spanwise velocity here)
-        fw = h5py.File(results_path + '/U.h5', 'r')
-        W_instantaneous = np.array(fw['U'])[:-1,:-1,:-1]
-        fw.close()
+        V_instantaneous = read_h5_file(results_path, 'V', settings.streamwise)
+        # U (spanwise velocity here)
+        W_instantaneous = read_h5_file(results_path, 'U', settings.streamwise)
         # Pressure
-        fp = h5py.File(results_path + '/P.h5', 'r')
-        P_instantaneous = np.array(fp['P'])[:-1,:-1,:-1]
-        fp.close()
+        P_instantaneous = read_h5_file(results_path, 'P', settings.streamwise)
         
         if (settings.get_T):
-            ft = h5py.File(results_path + '/sca1.h5', 'r')
-            self.T.set_instantaneous(np.array(ft['sca1'])[:-1,:-1,:-1])
-            ft.close()
+            self.T.set_instantaneous(read_h5_file(results_path, 'sca1', settings.streamwise))
             
         # from staggered to cell center field
         U_instantaneous = interpolate_to_cc_x(U_instantaneous)

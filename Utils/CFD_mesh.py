@@ -15,7 +15,7 @@ import numpy as np
 import h5py
 from Settings import Settings
 
-from utilities import find_nearest
+from utilities import find_nearest, read_h5_file
 
 class CFD_mesh:
     
@@ -38,9 +38,7 @@ class CFD_mesh:
                     + str(settings.preliminary_iterations*1000)
     
         # U (streamwise velocity here)
-        fu = h5py.File(mean_folder + '/W.h5', 'r')
-        U_mean = np.array(fu['W'])[:-1,:-1,:-1]
-        fu.close()
+        U_mean = read_h5_file(mean_folder, 'W', settings.streamwise)
 
         self.nx = U_mean.shape[2]
         self.ny = U_mean.shape[1]
