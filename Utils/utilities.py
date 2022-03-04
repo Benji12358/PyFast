@@ -14,7 +14,7 @@ def find_nearest(array, value):
     
     Parameters
     ----------
-    array : 3D numpy array with shape (n)
+    array : 1D numpy array with shape (n)
         Mesh array of any direction
     value : Real
         Position wanted
@@ -31,19 +31,21 @@ def find_nearest(array, value):
 
 
 def read_h5_file(path, field_to_read, streamwise_direction):
-    """Given a mesh array, return the closest index corresponding to a given position. 
+    """Given a path and field to read, return 3D field. 
     
     Parameters
     ----------
-    array : 3D numpy array with shape (n)
-        Mesh array of any direction
-    value : Real
-        Position wanted
+    path : String
+        Path where to read the h5 file
+    field_to_read : String
+        Field to read
+    streamwise_direction : Integer
+        Streamwise direction of the flow set in MULTIFAST
     
     Returns
     -------
-    Integer
-        The closest index corresponding to the value in the array
+    3D numpy array with shape shape (nz,ny,nx)
+        The 3D field in the format (spanwise,vertical,streamwise)
             
     """
     
