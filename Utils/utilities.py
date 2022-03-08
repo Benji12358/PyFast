@@ -44,7 +44,7 @@ def read_h5_file(path, field_to_read, streamwise_direction):
     
     Returns
     -------
-    3D numpy array with shape shape (nz,ny,nx)
+    3D numpy array with shape (nz,ny,nx)
         The 3D field in the format (spanwise,vertical,streamwise)
             
     """

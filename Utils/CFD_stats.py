@@ -518,7 +518,7 @@ class CFD_stats:
             # U (spanwise velocity here)
             W_tmp = read_h5_file(mean_folder, 'U', settings.streamwise)
             # Pressure
-            P_tmp += read_h5_file(mean_folder, 'P', settings.streamwise)
+            P_mean += read_h5_file(mean_folder, 'P', settings.streamwise)
             
             # from staggered to cell center field
             U_mean += interpolate_to_cc_x(U_tmp)[:,:,:mesh.nx]
