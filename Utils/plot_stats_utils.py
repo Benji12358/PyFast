@@ -90,9 +90,11 @@ def read_and_plot_basic_velocity_stats(settings:Settings, mesh:CFD_mesh, current
     
     ######## mean
     fig = CFD_plot('full')
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_RMS['U_mean']*(settings.Re/wall_UQ['Re_tau_spot']), 5, marker_size=10, marker='s', color='None', markeredgecolor='k')
     if (plotWithTheo):
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_RMS['U_mean']*(settings.Re/wall_UQ['Re_tau_spot']), 5, marker_size=10, marker='s', color='None', markeredgecolor='k')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], Mean_RMS_theo['U_mean']*(settings.Re/wall_UQ_theo['Re_tau_spot']))
+    else:
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_RMS['U_mean']*(settings.Re/wall_UQ['Re_tau_spot']))
     fig.chg_x_axis(r'$y^{+}$',axis_low_bound=10**(-1),axis_high_bound=wall_UQ['Re_tau_spot'],axis_scale='log')
     fig.chg_y_axis(r'$\overline{U}^{+}$',axis_low_bound=0,axis_high_bound=20,axis_ticks = [0,5,10,15,20])
     fig.custom_layout()
@@ -100,13 +102,17 @@ def read_and_plot_basic_velocity_stats(settings:Settings, mesh:CFD_mesh, current
 
     ######## RMS
     fig = CFD_plot('full')
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_RMS['U_rms']*(settings.Re/wall_UQ['Re_tau_spot']), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$\overline{u^{'+}_{RMS}}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_RMS['V_rms']*(settings.Re/wall_UQ['Re_tau_spot']), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$\overline{v^{'+}_{RMS}}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_RMS['W_rms']*(settings.Re/wall_UQ['Re_tau_spot']), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$\overline{w^{'+}_{RMS}}$")
     if (plotWithTheo):
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_RMS['U_rms']*(settings.Re/wall_UQ['Re_tau_spot']), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$\overline{u^{'+}_{RMS}}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_RMS['V_rms']*(settings.Re/wall_UQ['Re_tau_spot']), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$\overline{v^{'+}_{RMS}}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_RMS['W_rms']*(settings.Re/wall_UQ['Re_tau_spot']), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$\overline{w^{'+}_{RMS}}$")
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], Mean_RMS_theo['U_rms']*(settings.Re/wall_UQ_theo['Re_tau_spot']), color='tab:blue')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], Mean_RMS_theo['V_rms']*(settings.Re/wall_UQ_theo['Re_tau_spot']), color='tab:orange')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], Mean_RMS_theo['W_rms']*(settings.Re/wall_UQ_theo['Re_tau_spot']), color='tab:green')
+    else:
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_RMS['U_rms']*(settings.Re/wall_UQ['Re_tau_spot']), color='tab:blue', label_name=r"$\overline{u^{'+}_{RMS}}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_RMS['V_rms']*(settings.Re/wall_UQ['Re_tau_spot']), color='tab:orange', label_name=r"$\overline{v^{'+}_{RMS}}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_RMS['W_rms']*(settings.Re/wall_UQ['Re_tau_spot']), color='tab:green', label_name=r"$\overline{w^{'+}_{RMS}}$")
     fig.chg_x_axis(r'$y^{+}$',axis_low_bound=0,axis_high_bound=wall_UQ['Re_tau_spot'])
     fig.chg_y_axis('Velocities RMS',axis_low_bound=0,axis_high_bound=1.1*np.max(Mean_RMS['U_rms']*settings.Re/wall_UQ['Re_tau_spot']))
     fig.custom_layout(enableLegend=True)
@@ -114,9 +120,11 @@ def read_and_plot_basic_velocity_stats(settings:Settings, mesh:CFD_mesh, current
 
     ######## diagnostic functions
     fig = CFD_plot('full')
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_RMS['U_rms']/Mean_RMS['U_mean'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$\frac{\overline{u^{'+}_{RMS}}}{\overline{u}}$")
     if (plotWithTheo):
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_RMS['U_rms']/Mean_RMS['U_mean'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$\frac{\overline{u^{'+}_{RMS}}}{\overline{u}}$")
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], Mean_RMS_theo['U_rms']/Mean_RMS_theo['U_mean'], color='tab:blue')
+    else:
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_RMS['U_rms']/Mean_RMS['U_mean'], color='tab:blue', label_name=r"$\frac{\overline{u^{'+}_{RMS}}}{\overline{u}}$")
     fig.chg_x_axis(r'$y^{+}$',axis_low_bound=0,axis_high_bound=wall_UQ['Re_tau_spot'])
     fig.chg_y_axis('')
     fig.custom_layout(enableLegend=True)
@@ -155,13 +163,17 @@ def read_and_plot_basic_velocity_stats(settings:Settings, mesh:CFD_mesh, current
 
     ######## Skewness
     fig = CFD_plot('full')
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['U_skewness'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$S(u^{'+})$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['V_skewness'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$S(v^{'+})$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['W_skewness'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$S(w^{'+})$")
     if (plotWithTheo):
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['U_skewness'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$S(u^{'+})$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['V_skewness'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$S(v^{'+})$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['W_skewness'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$S(w^{'+})$")
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], Skewness_Flatness_theo['U_skewness'], color='tab:blue')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], Skewness_Flatness_theo['V_skewness'], color='tab:orange')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], Skewness_Flatness_theo['W_skewness'], color='tab:green')
+    else:
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['U_skewness'], color='tab:blue', label_name=r"$S(u^{'+})$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['V_skewness'], color='tab:orange', label_name=r"$S(v^{'+})$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['W_skewness'], color='tab:green', label_name=r"$S(w^{'+})$")
     fig.chg_x_axis(r'$y^{+}$',axis_low_bound=0,axis_high_bound=2*wall_UQ['Re_tau_spot'])
     fig.chg_y_axis('Velocities skewness')
     fig.custom_layout(enableLegend=True)
@@ -169,13 +181,17 @@ def read_and_plot_basic_velocity_stats(settings:Settings, mesh:CFD_mesh, current
 
     ######## Flatness
     fig = CFD_plot('full')
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['U_flatness'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$F(u^{'+})$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['V_flatness'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$F(v^{'+})$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['W_flatness'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$F(w^{'+})$")
     if (plotWithTheo):
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['U_flatness'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$F(u^{'+})$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['V_flatness'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$F(v^{'+})$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['W_flatness'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$F(w^{'+})$")
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], Skewness_Flatness_theo['U_flatness'], color='tab:blue')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], Skewness_Flatness_theo['V_flatness'], color='tab:orange')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], Skewness_Flatness_theo['W_flatness'], color='tab:green')
+    else:
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['U_flatness'], color='tab:blue', label_name=r"$F(u^{'+})$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['V_flatness'], color='tab:orange', label_name=r"$F(v^{'+})$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['W_flatness'], color='tab:green', label_name=r"$F(w^{'+})$")
     fig.chg_x_axis(r'$y^{+}$',axis_low_bound=0,axis_high_bound=2*wall_UQ['Re_tau_spot'])
     fig.chg_y_axis('Velocities flatness')
     fig.custom_layout(enableLegend=True)
@@ -251,17 +267,23 @@ def read_and_plot_transport_equation_terms(settings:Settings, mesh:CFD_mesh, cur
     
     # plot
     fig = CFD_plot('full')
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uu_budget['Production']                             * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$P^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uu_budget['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$T^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uu_budget['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$\pi^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uu_budget['Molecular diffusion']                    * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:red', label_name=r"$D^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uu_budget['Dissipation']                            * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:purple', label_name=r"$\epsilon^{+}$")
     if (plotWithTheo):
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uu_budget['Production']                             * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$P^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uu_budget['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$T^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uu_budget['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$\pi^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uu_budget['Molecular diffusion']                    * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:red', label_name=r"$D^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uu_budget['Dissipation']                            * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:purple', label_name=r"$\epsilon^{+}$")
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], uu_budget_theo['Production']                             * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:blue')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], uu_budget_theo['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:orange')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], uu_budget_theo['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:green')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], uu_budget_theo['Molecular diffusion']                    * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:red')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], uu_budget_theo['Dissipation']                            * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:purple')
+    else:
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], uu_budget['Production']                             * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:blue', label_name=r"$P^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], uu_budget['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:orange', label_name=r"$T^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], uu_budget['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:green', label_name=r"$\pi^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], uu_budget['Molecular diffusion']                    * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:red', label_name=r"$D^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], uu_budget['Dissipation']                            * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:purple', label_name=r"$\epsilon^{+}$")
     fig.chg_x_axis(r'$y^{+}$',axis_low_bound=10**(-1),axis_high_bound=2*wall_UQ['Re_tau_spot'], axis_scale='log')
     fig.chg_y_axis('')
     fig.custom_layout(enableLegend=True)
@@ -300,17 +322,23 @@ def read_and_plot_transport_equation_terms(settings:Settings, mesh:CFD_mesh, cur
     
     # plot
     fig = CFD_plot('full')
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], vv_budget['Production']                             * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$P^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], vv_budget['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$T^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], vv_budget['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$\pi^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], vv_budget['Molecular diffusion']                    * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:red', label_name=r"$D^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], vv_budget['Dissipation']                            * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:purple', label_name=r"$\epsilon^{+}$")
     if (plotWithTheo):
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], vv_budget['Production']                             * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$P^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], vv_budget['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$T^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], vv_budget['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$\pi^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], vv_budget['Molecular diffusion']                    * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:red', label_name=r"$D^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], vv_budget['Dissipation']                            * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:purple', label_name=r"$\epsilon^{+}$")
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], vv_budget_theo['Production']                             * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:blue')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], vv_budget_theo['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:orange')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], vv_budget_theo['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:green')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], vv_budget_theo['Molecular diffusion']                    * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:red')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], vv_budget_theo['Dissipation']                            * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:purple')
+    else:
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], vv_budget['Production']                             * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:blue', label_name=r"$P^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], vv_budget['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:orange', label_name=r"$T^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], vv_budget['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:green', label_name=r"$\pi^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], vv_budget['Molecular diffusion']                    * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:red', label_name=r"$D^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], vv_budget['Dissipation']                            * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:purple', label_name=r"$\epsilon^{+}$")
     fig.chg_x_axis(r'$y^{+}$',axis_low_bound=10**(-1),axis_high_bound=2*wall_UQ['Re_tau_spot'], axis_scale='log')
     fig.chg_y_axis('')
     fig.custom_layout(enableLegend=True)
@@ -349,17 +377,23 @@ def read_and_plot_transport_equation_terms(settings:Settings, mesh:CFD_mesh, cur
     
     # plot
     fig = CFD_plot('full')
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], ww_budget['Production']                             * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$P^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], ww_budget['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$T^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], ww_budget['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$\pi^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], ww_budget['Molecular diffusion']                    * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:red', label_name=r"$D^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], ww_budget['Dissipation']                            * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:purple', label_name=r"$\epsilon^{+}$")
     if (plotWithTheo):
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], ww_budget['Production']                             * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$P^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], ww_budget['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$T^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], ww_budget['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$\pi^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], ww_budget['Molecular diffusion']                    * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:red', label_name=r"$D^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], ww_budget['Dissipation']                            * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:purple', label_name=r"$\epsilon^{+}$")
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], ww_budget_theo['Production']                             * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:blue')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], ww_budget_theo['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:orange')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], ww_budget_theo['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:green')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], ww_budget_theo['Molecular diffusion']                    * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:red')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], ww_budget_theo['Dissipation']                            * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:purple')
+    else:
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], ww_budget['Production']                             * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:blue', label_name=r"$P^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], ww_budget['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:orange', label_name=r"$T^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], ww_budget['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:green', label_name=r"$\pi^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], ww_budget['Molecular diffusion']                    * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:red', label_name=r"$D^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], ww_budget['Dissipation']                            * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:purple', label_name=r"$\epsilon^{+}$")
     fig.chg_x_axis(r'$y^{+}$',axis_low_bound=10**(-1),axis_high_bound=2*wall_UQ['Re_tau_spot'], axis_scale='log')
     fig.chg_y_axis('')
     fig.custom_layout(enableLegend=True)
@@ -398,17 +432,23 @@ def read_and_plot_transport_equation_terms(settings:Settings, mesh:CFD_mesh, cur
     
     # plot
     fig = CFD_plot('full')
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uv_budget['Production']                             * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$P^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uv_budget['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$T^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uv_budget['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$\pi^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uv_budget['Molecular diffusion']                    * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:red', label_name=r"$D^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uv_budget['Dissipation']                            * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:purple', label_name=r"$\epsilon^{+}$")
     if (plotWithTheo):
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uv_budget['Production']                             * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$P^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uv_budget['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$T^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uv_budget['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$\pi^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uv_budget['Molecular diffusion']                    * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:red', label_name=r"$D^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], uv_budget['Dissipation']                            * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:purple', label_name=r"$\epsilon^{+}$")
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], uv_budget_theo['Production']                             * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:blue')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], uv_budget_theo['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:orange')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], uv_budget_theo['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:green')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], uv_budget_theo['Molecular diffusion']                    * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:red')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], uv_budget_theo['Dissipation']                            * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:purple')
+    else:
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], uv_budget['Production']                             * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:blue', label_name=r"$P^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], uv_budget['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:orange', label_name=r"$T^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], uv_budget['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:green', label_name=r"$\pi^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], uv_budget['Molecular diffusion']                    * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:red', label_name=r"$D^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], uv_budget['Dissipation']                            * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:purple', label_name=r"$\epsilon^{+}$")
     fig.chg_x_axis(r'$y^{+}$',axis_low_bound=10**(-1),axis_high_bound=2*wall_UQ['Re_tau_spot'], axis_scale='log')
     fig.chg_y_axis('')
     fig.custom_layout(enableLegend=True)
@@ -455,17 +495,23 @@ def read_and_plot_transport_equation_terms(settings:Settings, mesh:CFD_mesh, cur
         
     # plot
     fig = CFD_plot('full')
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], k_budget['Production']                             * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$P^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], k_budget['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$T^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], k_budget['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$\pi^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], k_budget['Molecular diffusion']                    * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:red', label_name=r"$D^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], k_budget['Dissipation']                            * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:purple', label_name=r"$\epsilon^{+}$")
     if (plotWithTheo):
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], k_budget['Production']                             * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$P^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], k_budget['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$T^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], k_budget['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$\pi^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], k_budget['Molecular diffusion']                    * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:red', label_name=r"$D^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], k_budget['Dissipation']                            * (settings.Re**3/wall_UQ['Re_tau_spot']**4), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:purple', label_name=r"$\epsilon^{+}$")
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], k_budget_theo['Production']                             * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:blue')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], k_budget_theo['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:orange')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], k_budget_theo['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:green')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], k_budget_theo['Molecular diffusion']                    * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:red')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], k_budget_theo['Dissipation']                            * (settings.Re**3/wall_UQ_theo['Re_tau_spot']**4), color='tab:purple')
+    else:
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], k_budget['Production']                             * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:blue', label_name=r"$P^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], k_budget['Turbulent Diffusive Flux']               * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:orange', label_name=r"$T^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], k_budget['Pressure velocity gradient correlation'] * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:green', label_name=r"$\pi^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], k_budget['Molecular diffusion']                    * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:red', label_name=r"$D^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], k_budget['Dissipation']                            * (settings.Re**3/wall_UQ['Re_tau_spot']**4), color='tab:purple', label_name=r"$\epsilon^{+}$")
     fig.chg_x_axis(r'$y^{+}$',axis_low_bound=10**(-1),axis_high_bound=2*wall_UQ['Re_tau_spot'], axis_scale='log')
     fig.chg_y_axis('')
     fig.custom_layout(enableLegend=True)
@@ -546,13 +592,17 @@ def read_and_plot_vorticity(settings:Settings, mesh:CFD_mesh, current_iteration 
     
     # vorticity RMS
     fig = CFD_plot('full')
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], vorticity['omega_x rms']*(settings.Re/wall_UQ['Re_tau_spot']**2), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$\omega_{x~RMS}^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], vorticity['omega_y rms']*(settings.Re/wall_UQ['Re_tau_spot']**2), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$\omega_{y~RMS}^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], vorticity['omega_z rms']*(settings.Re/wall_UQ['Re_tau_spot']**2), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$\omega_{z~RMS}^{+}$")
     if (plotWithTheo):
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], vorticity['omega_x rms']*(settings.Re/wall_UQ['Re_tau_spot']**2), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$\omega_{x~RMS}^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], vorticity['omega_y rms']*(settings.Re/wall_UQ['Re_tau_spot']**2), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$\omega_{y~RMS}^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], vorticity['omega_z rms']*(settings.Re/wall_UQ['Re_tau_spot']**2), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$\omega_{z~RMS}^{+}$")
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], vorticity_theo['omega_x rms']*(settings.Re/wall_UQ_theo['Re_tau_spot']**2), color='tab:blue')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], vorticity_theo['omega_y rms']*(settings.Re/wall_UQ_theo['Re_tau_spot']**2), color='tab:orange')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], vorticity_theo['omega_z rms']*(settings.Re/wall_UQ_theo['Re_tau_spot']**2), color='tab:green')
+    else:
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], vorticity['omega_x rms']*(settings.Re/wall_UQ['Re_tau_spot']**2), color='tab:blue', label_name=r"$\omega_{x~RMS}^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], vorticity['omega_y rms']*(settings.Re/wall_UQ['Re_tau_spot']**2), color='tab:orange', label_name=r"$\omega_{y~RMS}^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], vorticity['omega_z rms']*(settings.Re/wall_UQ['Re_tau_spot']**2), color='tab:green', label_name=r"$\omega_{z~RMS}^{+}$")
     fig.chg_x_axis(r'$y^{+}$',axis_low_bound=0,axis_high_bound=2*wall_UQ['Re_tau_spot'])
     fig.chg_y_axis('')
     fig.custom_layout(enableLegend=True)
@@ -632,9 +682,11 @@ def read_and_plot_reynolds_stresses(settings:Settings, mesh:CFD_mesh, current_it
     
     # vorticity RMS
     fig = CFD_plot('full')
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], -reynolds_stresses['uv']*(settings.Re/wall_UQ['Re_tau_spot'])**2, 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$-\overline{uv}^{+}$")
     if (plotWithTheo):
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], -reynolds_stresses['uv']*(settings.Re/wall_UQ['Re_tau_spot'])**2, 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$-\overline{uv}^{+}$")
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], -reynolds_stresses_theo['uv']*(settings.Re/wall_UQ_theo['Re_tau_spot'])**2, color='tab:blue')
+    else:
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], -reynolds_stresses['uv']*(settings.Re/wall_UQ['Re_tau_spot'])**2, color='tab:blue', label_name=r"$-\overline{uv}^{+}$")
     fig.chg_x_axis(r'$y^{+}$',axis_low_bound=0,axis_high_bound=2*wall_UQ['Re_tau_spot'])
     fig.chg_y_axis('Reynolds stresses')
     fig.custom_layout(enableLegend=True)
@@ -714,9 +766,11 @@ def read_and_plot_basic_temperature_stats(settings:Settings, mesh:CFD_mesh, curr
         
     ######## mean
     fig = CFD_plot('full')
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_Correlations['T_mean']/wall_TQ['T_tau_spot'], 5, marker_size=10, marker='s', color='None', markeredgecolor='k')
     if (plotWithTheo):
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_Correlations['T_mean']/wall_TQ['T_tau_spot'], 5, marker_size=10, marker='s', color='None', markeredgecolor='k')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], Mean_Correlations_theo['T_mean']/wall_TQ_theo['T_tau_spot'])
+    else:
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_Correlations['T_mean']/wall_TQ['T_tau_spot'])
     fig.chg_x_axis(r'$y^{+}$',axis_low_bound=10**(-1),axis_high_bound=wall_UQ['Re_tau_spot'], axis_scale='log')
     if ('Ka' in settings.current_path):
         fig.chg_y_axis(r'$\overline{\theta}^{+}$', axis_low_bound=10**0,axis_high_bound=10**2, axis_scale='log')
@@ -727,9 +781,11 @@ def read_and_plot_basic_temperature_stats(settings:Settings, mesh:CFD_mesh, curr
 
     ######## RMS
     fig = CFD_plot('full')
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_Correlations['T_rms']/wall_TQ['T_tau_spot'], 5, marker_size=10, marker='s', color='None', markeredgecolor='k')
     if (plotWithTheo):
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_Correlations['T_rms']/wall_TQ['T_tau_spot'], 5, marker_size=10, marker='s', color='None', markeredgecolor='k')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], Mean_Correlations_theo['T_rms']/wall_TQ_theo['T_tau_spot'])
+    else:
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_Correlations['T_rms']/wall_TQ['T_tau_spot'])
     fig.chg_x_axis(r'$y^{+}$',axis_low_bound=0,axis_high_bound=wall_UQ['Re_tau_spot'])
     if ('Ka' in settings.current_path):
         fig.chg_y_axis(r"$\theta^{'+}_{RMS}$")
@@ -740,12 +796,17 @@ def read_and_plot_basic_temperature_stats(settings:Settings, mesh:CFD_mesh, curr
     
     ######## diagnostic function
     fig = CFD_plot('full')
-    if ('Ka' in settings.current_path):
-        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_Correlations['T_rms']/Mean_Correlations['T_mean'], 5, marker_size=10, marker='s', color='None', markeredgecolor='k', label_name=r"$\frac{\overline{\theta^{'+}_{RMS}}}{\overline{\theta}}$")
-    else:
-        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_Correlations['T_rms']/Mean_Correlations['T_mean'], 5, marker_size=10, marker='s', color='None', markeredgecolor='k', label_name=r"$\frac{\overline{T^{'+}_{RMS}}}{\overline{T}}$")
     if (plotWithTheo):
+        if ('Ka' in settings.current_path):
+            fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_Correlations['T_rms']/Mean_Correlations['T_mean'], 5, marker_size=10, marker='s', color='None', markeredgecolor='k', label_name=r"$\frac{\overline{\theta^{'+}_{RMS}}}{\overline{\theta}}$")
+        else:
+            fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_Correlations['T_rms']/Mean_Correlations['T_mean'], 5, marker_size=10, marker='s', color='None', markeredgecolor='k', label_name=r"$\frac{\overline{T^{'+}_{RMS}}}{\overline{T}}$")
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], Mean_Correlations_theo['T_rms']/Mean_Correlations_theo['T_mean'])
+    else:
+        if ('Ka' in settings.current_path):
+            fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_Correlations['T_rms']/Mean_Correlations['T_mean'], label_name=r"$\frac{\overline{\theta^{'+}_{RMS}}}{\overline{\theta}}$")
+        else:
+            fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], Mean_Correlations['T_rms']/Mean_Correlations['T_mean'], label_name=r"$\frac{\overline{T^{'+}_{RMS}}}{\overline{T}}$")
     fig.chg_x_axis(r'$y^{+}$',axis_low_bound=0,axis_high_bound=wall_UQ['Re_tau_spot'])
     fig.chg_y_axis('')
     fig.custom_layout(enableLegend = True)
@@ -753,18 +814,27 @@ def read_and_plot_basic_temperature_stats(settings:Settings, mesh:CFD_mesh, curr
 
     ######## temperature_velocity correlations
     fig = CFD_plot('full')
-    if ('Ka' in settings.current_path):
-        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], (Mean_Correlations['UfTf']/wall_TQ['T_tau_spot'])*settings.Re/wall_UQ['Re_tau_spot'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$\overline{u^{'} \theta^{'}}^{+}$")
-        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], (Mean_Correlations['VfTf']/wall_TQ['T_tau_spot'])*settings.Re/wall_UQ['Re_tau_spot'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$\overline{v^{'} \theta^{'}}^{+}$")
-        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], (Mean_Correlations['WfTf']/wall_TQ['T_tau_spot'])*settings.Re/wall_UQ['Re_tau_spot'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$\overline{w^{'} \theta^{'}}^{+}$")
-    else:
-        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], (Mean_Correlations['UfTf']/wall_TQ['T_tau_spot'])*settings.Re/wall_UQ['Re_tau_spot'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$\overline{u^{'} T^{'}}^{+}$")
-        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], (Mean_Correlations['VfTf']/wall_TQ['T_tau_spot'])*settings.Re/wall_UQ['Re_tau_spot'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$\overline{v^{'} T^{'}}^{+}$")
-        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], (Mean_Correlations['WfTf']/wall_TQ['T_tau_spot'])*settings.Re/wall_UQ['Re_tau_spot'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$\overline{w^{'} T^{'}}^{+}$")
     if (plotWithTheo):
+        if ('Ka' in settings.current_path):
+            fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], (Mean_Correlations['UfTf']/wall_TQ['T_tau_spot'])*settings.Re/wall_UQ['Re_tau_spot'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$\overline{u^{'} \theta^{'}}^{+}$")
+            fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], (Mean_Correlations['VfTf']/wall_TQ['T_tau_spot'])*settings.Re/wall_UQ['Re_tau_spot'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$\overline{v^{'} \theta^{'}}^{+}$")
+            fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], (Mean_Correlations['WfTf']/wall_TQ['T_tau_spot'])*settings.Re/wall_UQ['Re_tau_spot'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$\overline{w^{'} \theta^{'}}^{+}$")
+        else:
+            fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], (Mean_Correlations['UfTf']/wall_TQ['T_tau_spot'])*settings.Re/wall_UQ['Re_tau_spot'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$\overline{u^{'} T^{'}}^{+}$")
+            fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], (Mean_Correlations['VfTf']/wall_TQ['T_tau_spot'])*settings.Re/wall_UQ['Re_tau_spot'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$\overline{v^{'} T^{'}}^{+}$")
+            fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], (Mean_Correlations['WfTf']/wall_TQ['T_tau_spot'])*settings.Re/wall_UQ['Re_tau_spot'], 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:green', label_name=r"$\overline{w^{'} T^{'}}^{+}$")
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], (Mean_Correlations_theo['UfTf']/wall_TQ_theo['T_tau_spot'])*settings.Re/wall_UQ_theo['Re_tau_spot'], color='tab:blue')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], (Mean_Correlations_theo['VfTf']/wall_TQ_theo['T_tau_spot'])*settings.Re/wall_UQ_theo['Re_tau_spot'], color='tab:orange')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], (Mean_Correlations_theo['WfTf']/wall_TQ_theo['T_tau_spot'])*settings.Re/wall_UQ_theo['Re_tau_spot'], color='tab:green')
+    else:
+        if ('Ka' in settings.current_path):
+            fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], (Mean_Correlations['UfTf']/wall_TQ['T_tau_spot'])*settings.Re/wall_UQ['Re_tau_spot'], color='tab:blue', label_name=r"$\overline{u^{'} \theta^{'}}^{+}$")
+            fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], (Mean_Correlations['VfTf']/wall_TQ['T_tau_spot'])*settings.Re/wall_UQ['Re_tau_spot'], color='tab:orange', label_name=r"$\overline{v^{'} \theta^{'}}^{+}$")
+            fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], (Mean_Correlations['WfTf']/wall_TQ['T_tau_spot'])*settings.Re/wall_UQ['Re_tau_spot'], color='tab:green', label_name=r"$\overline{w^{'} \theta^{'}}^{+}$")
+        else:
+            fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], (Mean_Correlations['UfTf']/wall_TQ['T_tau_spot'])*settings.Re/wall_UQ['Re_tau_spot'], color='tab:blue', label_name=r"$\overline{u^{'} T^{'}}^{+}$")
+            fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], (Mean_Correlations['VfTf']/wall_TQ['T_tau_spot'])*settings.Re/wall_UQ['Re_tau_spot'], color='tab:orange', label_name=r"$\overline{v^{'} T^{'}}^{+}$")
+            fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], (Mean_Correlations['WfTf']/wall_TQ['T_tau_spot'])*settings.Re/wall_UQ['Re_tau_spot'], color='tab:green', label_name=r"$\overline{w^{'} T^{'}}^{+}$")
     fig.chg_x_axis(r'$y^{+}$', axis_low_bound=0, axis_high_bound=wall_UQ['Re_tau_spot'])
     fig.chg_y_axis('')
     fig.custom_layout(enableLegend = True)
@@ -806,9 +876,11 @@ def read_and_plot_basic_temperature_stats(settings:Settings, mesh:CFD_mesh, curr
         
     ######## Skewness
     fig = CFD_plot('full')
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['T_skewness'], 5, marker_size=10, marker='s', color='None', markeredgecolor='k')
     if (plotWithTheo):
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['T_skewness'], 5, marker_size=10, marker='s', color='None', markeredgecolor='k')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], Skewness_Flatness_theo['T_skewness'])
+    else:
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['T_skewness'])
     fig.chg_x_axis(r'$y^{+}$',axis_low_bound=0,axis_high_bound=2*wall_UQ['Re_tau_spot'])
     if ('Ka' in settings.current_path):
         fig.chg_y_axis(r"$S(\theta^{'+})$")
@@ -819,9 +891,11 @@ def read_and_plot_basic_temperature_stats(settings:Settings, mesh:CFD_mesh, curr
     
     ######## Flatness
     fig = CFD_plot('full')
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['T_flatness'], 5, marker_size=10, marker='s', color='None', markeredgecolor='k')
     if (plotWithTheo):
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['T_flatness'], 5, marker_size=10, marker='s', color='None', markeredgecolor='k')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], Skewness_Flatness_theo['T_flatness'])
+    else:
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], Skewness_Flatness['T_flatness'])
     fig.chg_x_axis(r'$y^{+}$',axis_low_bound=0,axis_high_bound=2*wall_UQ['Re_tau_spot'])
     if ('Ka' in settings.current_path):
         fig.chg_y_axis(r"$F(\theta^{'+})$")
@@ -901,15 +975,20 @@ def read_and_plot_temperature_budgets(settings:Settings, mesh:CFD_mesh, current_
     
     # plot
     fig = CFD_plot('full')
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], t_budget['Production']          * (settings.Re / (wall_TQ['T_tau_spot']*wall_UQ['Re_tau_spot'])**2), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$P^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], t_budget['Turbulent Transport'] * (settings.Re / (wall_TQ['T_tau_spot']*wall_UQ['Re_tau_spot'])**2), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$T^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], t_budget['Molecular diffusion'] * (settings.Re / (wall_TQ['T_tau_spot']*wall_UQ['Re_tau_spot'])**2), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:red', label_name=r"$D^{+}$")
-    fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], t_budget['Dissipation']         * (settings.Re / (wall_TQ['T_tau_spot']*wall_UQ['Re_tau_spot'])**2), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:purple', label_name=r"$\epsilon^{+}$")
     if (plotWithTheo):
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], t_budget['Production']          * (settings.Re / (wall_TQ['T_tau_spot']*wall_UQ['Re_tau_spot'])**2), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:blue', label_name=r"$P^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], t_budget['Turbulent Transport'] * (settings.Re / (wall_TQ['T_tau_spot']*wall_UQ['Re_tau_spot'])**2), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:orange', label_name=r"$T^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], t_budget['Molecular diffusion'] * (settings.Re / (wall_TQ['T_tau_spot']*wall_UQ['Re_tau_spot'])**2), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:red', label_name=r"$D^{+}$")
+        fig.add_scatter(mesh.Yc*wall_UQ['Re_tau_spot'], t_budget['Dissipation']         * (settings.Re / (wall_TQ['T_tau_spot']*wall_UQ['Re_tau_spot'])**2), 5, marker_size=10, marker='s', color='None', markeredgecolor='tab:purple', label_name=r"$\epsilon^{+}$")
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], t_budget_theo['Production']          * (settings.Re / (wall_TQ_theo['T_tau_spot']*wall_UQ_theo['Re_tau_spot'])**2), color='tab:blue')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], t_budget_theo['Turbulent Transport'] * (settings.Re / (wall_TQ_theo['T_tau_spot']*wall_UQ_theo['Re_tau_spot'])**2), color='tab:orange')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], t_budget_theo['Molecular diffusion'] * (settings.Re / (wall_TQ_theo['T_tau_spot']*wall_UQ_theo['Re_tau_spot'])**2), color='tab:red')
         fig.add_plot(mesh.Yc*wall_UQ_theo['Re_tau_spot'], t_budget_theo['Dissipation']         * (settings.Re / (wall_TQ_theo['T_tau_spot']*wall_UQ_theo['Re_tau_spot'])**2), color='tab:purple')
+    else:
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], t_budget['Production']          * (settings.Re / (wall_TQ['T_tau_spot']*wall_UQ['Re_tau_spot'])**2), color='tab:blue', label_name=r"$P^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], t_budget['Turbulent Transport'] * (settings.Re / (wall_TQ['T_tau_spot']*wall_UQ['Re_tau_spot'])**2), color='tab:orange', label_name=r"$T^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], t_budget['Molecular diffusion'] * (settings.Re / (wall_TQ['T_tau_spot']*wall_UQ['Re_tau_spot'])**2), color='tab:red', label_name=r"$D^{+}$")
+        fig.add_plot(mesh.Yc*wall_UQ['Re_tau_spot'], t_budget['Dissipation']         * (settings.Re / (wall_TQ['T_tau_spot']*wall_UQ['Re_tau_spot'])**2), color='tab:purple', label_name=r"$\epsilon^{+}$")
     fig.chg_x_axis(r'$y^{+}$',axis_low_bound=10**(-1),axis_high_bound=2*wall_UQ['Re_tau_spot'], axis_scale='log')
     fig.chg_y_axis('')
     fig.custom_layout(enableLegend=True)
