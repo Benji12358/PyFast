@@ -28,6 +28,25 @@ root_postproc = '/fsnet/people/arrondea7b/project/21MULTIFAST/Sim_data/PostProce
 compute_lambda2 = False                                                                     # Flag if lambda2 will be computed
 slice_lambda2 = 64                                                                          # Integer up to which is computed lambda2 (by default computing between 0 and slice_lambda2)
 
+compute_spectrums = False                                                                    # Flag if spectrums will be computed  
+
+################ For IBM_mask
+IBM_flag = False
+
+i_start = [228,740,228,740] 
+i_end = [283,795,283,795]    
+j_start = [0,0,186,186] 
+j_end = [69,69,256,256]   
+k_start = [0,64,64,0] 
+k_end = [63,128,128,63]   
+
+x_start = [1.08,3.51,1.08,3.51] 
+x_end = [1.35,3.78,1.35,3.78]    
+y_start = [0.0,0.0,1.73,1.73] 
+y_end = [0.27,0.27,2.0,2.0]   
+z_start = [0.0,1.1,1.1,0.0] 
+z_end = [1.1,2.2,2.2,1.1] 
+
 
 ###################################################################
 ################        CHOOSING THE SPOT           ###############

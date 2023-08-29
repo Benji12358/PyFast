@@ -20,7 +20,7 @@ from CFD_mesh import CFD_mesh
 from Settings import Settings
 
 def compute_correlations_spot(array1, array2, array3 = None, array4 = None):
-    """Computation of the correlations.
+    """Computation of the correlations in the "spot/domain".
     
     Depending on the inputs, compute the 2nd, 3rd of 4th order correlation.
     By default, computes 2nd order correlation.
@@ -58,6 +58,106 @@ def compute_correlations_spot(array1, array2, array3 = None, array4 = None):
     correlSpot = np.nan_to_num(np.nanmean(tmp,axis=(0,2)))
     
     return correlSpot
+
+def compute_correlations_x(array1, array2, array3 = None, array4 = None):
+    """Computation of the correlations with respect to x.
+    
+    Depending on the inputs, compute the 2nd, 3rd of 4th order correlation.
+    By default, computes 2nd order correlation.
+    
+    Parameters
+    ----------
+    array1 : 3D numpy array with shape (nz,ny,nx)
+        A flow field
+    array2 : 3D numpy array with shape (nz,ny,nx)
+        A flow field
+    array3 : 3D numpy array with shape (nz,ny,nx)
+        A flow field. Default value of None
+    array4 : 3D numpy array with shape (nz,ny,nx)
+        A flow field. Default value of None
+
+    Returns
+    -------
+    1D numpy array with shape (ny)
+        The spatial averaged of the computed correlation.
+    """
+    
+    if (array4 is not None):
+        
+        tmp = array1 * array2 * array3 * array4
+        
+    elif (array3 is not None):
+        
+        tmp = array1 * array2 * array3
+        
+    else:
+        
+        tmp = array1 * array2
+        
+    tmp[tmp==0] = np.nan
+    correlx = np.nan_to_num(np.nanmean(tmp,axis=(0)))
+    
+    return correlx
+
+def compute_correlations_spot_3D(array1, array2, array3 = None, array4 = None):
+    """Computation of the correlations.
+    
+    Depending on the inputs, compute the 2nd, 3rd of 4th order correlation.
+    By default, computes 2nd order correlation.
+    
+    Parameters
+    ----------
+    array1 : 3D numpy array with shape (nz,ny,nx)
+        A flow field
+    array2 : 3D numpy array with shape (nz,ny,nx)
+        A flow field
+    array3 : 3D numpy array with shape (nz,ny,nx)
+        A flow field. Default value of None
+    array4 : 3D numpy array with shape (nz,ny,nx)
+        A flow field. Default value of None
+
+    Returns
+    -------
+    3D numpy array with shape (nz,ny,nx)
+        The spatial averaged of the computed correlation.
+    """
+    
+    if (array4 is not None):
+        
+        correlSpot = array1 * array2 * array3 * array4
+        
+    elif (array3 is not None):
+        
+        correlSpot = array1 * array2 * array3
+        
+    else:
+        
+        correlSpot = array1 * array2
+    
+    return correlSpot
+
+def average_xz_spot(array1, spot):
+    """Computation of the average on planes within a spot.
+    
+    Parameters
+    ----------
+    array1 : 3D numpy array with shape (nz,ny,nx)
+        A flow field
+    spot : 3D numpy array with shape (nz,ny,nx)
+        The spot/sub domain where the average is computed
+
+    Returns
+    -------
+    1D numpy array with shape (ny)
+        The spatial averaged of the computed correlation.
+    """
+    
+    
+    tmp = array1 * spot
+    tmp[tmp==0] = np.nan
+    avg_array = np.nan_to_num(np.nanmean(tmp,axis=(0,2)))
+    
+    return avg_array
 
 def write_stats(dictionnary, current_path, current_iteration, ny):
     """Write statistics to .dat file.
@@ -154,6 +254,7 @@ def read_stats(dictionnary, current_path, current_iteration = None):
         
     counter = 0
     number_rows = len(dictionnary.keys())
+    # print(fnam)
     
     for key in dictionnary.keys():
         
@@ -247,7 +348,7 @@ def prettify(elem):
     return reparsed.toprettyxml(indent="  ")
     
 
-def write_hdf5(fname, dictionnary, mesh:CFD_mesh, settings:Settings, Re_tau = 1):
+def write_hdf5(fname, dictionnary, mesh:CFD_mesh, settings:Settings, Re_tau = 1, shift = False):
     """Write 3D fields to .h5 file.
     
     Write a dictionnary of 3D fields in .h5 file.
@@ -278,10 +379,17 @@ def write_hdf5(fname, dictionnary, mesh:CFD_mesh, settings:Settings, Re_tau = 1)
     out = h5py.File(fname + '.h5', 'w') # open HDF5 file for writing
 
     for key, array in dictionnary.items():
-        out[str(key)] = np.roll(array[:,:settings.slice_lambda2,:],-find_nearest(mesh.Xc,settings.shift))
+        if (len(array.shape)==3):
+            if shift:
+                out[str(key)] = np.roll(array[:,:settings.slice_lambda2,:],-settings.shift)
+            else:
+                out[str(key)] = array[:,:settings.slice_lambda2,:]
+        else:
+            out[str(key)] = array
 
     # write mesh in h5 file
-    out['Xc'] = (mesh.Xc + mesh.Xc[find_nearest(mesh.Xc,settings.shift)]) * Re_tau
+    # out['Xc'] = (mesh.Xc + mesh.Xc[find_nearest(mesh.Xc,settings.shift)]) * Re_tau
+    out['Xc'] = mesh.Xc * Re_tau
     out['Yc'] = mesh.Yc[:settings.slice_lambda2] * Re_tau
     out['Zc'] = mesh.Zc * Re_tau
 
@@ -328,7 +436,7 @@ def write_xdmf(fname, dictionnary, mesh:CFD_mesh, settings:Settings):
 
     topology=ET.SubElement(grid,'Topology')
     topology.set("TopologyType","3DRectMesh")
-    topology.set("Dimensions",str(mesh.nz)+" "+str(mesh.ny-settings.slice_lambda2)+" "+str(mesh.nx))
+    topology.set("Dimensions",str(mesh.nz)+" "+str(settings.slice_lambda2)+" "+str(mesh.nx))
 
     grid.extend(topology)
     grid.set("Name", "mesh")
@@ -347,7 +455,7 @@ def write_xdmf(fname, dictionnary, mesh:CFD_mesh, settings:Settings):
     dataItemZc.text = fname + '.h5'+":/Xc"
 
     dataItemYc=ET.SubElement(geometry, "DataItem")
-    dataItemYc.set("Dimensions",str(mesh.ny-settings.slice_lambda2))
+    dataItemYc.set("Dimensions",str(settings.slice_lambda2))
     dataItemYc.set("Name", "Yc")
     dataItemYc.set("NumberType", "Float")
     dataItemYc.set("Precision", "8")
@@ -370,7 +478,7 @@ def write_xdmf(fname, dictionnary, mesh:CFD_mesh, settings:Settings):
         attribute.set("AttributeType", "Scalar")
         attribute.set("Center","Node")
         dataItem=ET.SubElement(attribute, "DataItem")
-        dataItem.set("Dimensions",str(mesh.nz)+" "+str(mesh.ny-settings.slice_lambda2)+" "+str(mesh.nx))
+        dataItem.set("Dimensions",str(mesh.nz)+" "+str(settings.slice_lambda2)+" "+str(mesh.nx))
         dataItem.set("NumberType", "Float")
         dataItem.set("Precision", "8")
         dataItem.set("Format", "HDF")

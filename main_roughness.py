@@ -3,15 +3,15 @@ Created on Mon Feb 28 09:40:01 2022
 
 @author: Benjamin Arrondeau
 
-@title: Time-average statistics main
+@title: Time-average statistics with roughness main
 
-@description: Example of main for time-average statistics.
+@description: Example of main for time-average statistics with roughness.
             Please, see the settings file for additional information.
 """
 
 import sys
 # appending a path
-sys.path.append('./Utils')
+sys.path.append('/.fsdyn_people/arrondea7b/project/21MULTIFAST/Rapport/scripts/PyFast/Utils')
 
 from Settings import Settings
 from CFD_mesh import CFD_mesh
@@ -30,7 +30,7 @@ def main():
     global settings, mesh, sim_environment    
 
     """Read the settings define by the user, and build the mesh"""
-    settings = Settings("postprocessSettings_Benj_theo")
+    settings = Settings("/.fsdyn_people/arrondea7b/project/21MULTIFAST/Rapport/scripts/PyFast/postprocessSettings_roughness")
     mesh = CFD_mesh(settings)
     
     """Initialize all variables of the simulation"""
@@ -41,12 +41,23 @@ def main():
     if (settings.get_T):
         sim_environment.get_thermal_spot()
         
+    sim_environment.get_spot_ibm(settings, mesh)
+        
+    if (settings.get_T):
+        sim_environment.thermal_spot = sim_environment.spot
+        
     if (compute_stats):
     
         """Compute the time-averaged mean fields"""
         sim_environment.compute_mean_fields(settings, mesh)
         
+        sim_environment.Re_tau_spot = 125
+        sim_environment.compute_drag_ibm(settings, mesh)
+        
+        sim_environment.compute_T_tau_and_Nu_ibm(settings, mesh)
+        
         sim_environment.save_wall_UQ_stats(settings, mesh)
+        sim_environment.save_drag(settings, mesh)
         if (settings.get_T):
             sim_environment.save_wall_TQ_stats(settings, mesh)
         
@@ -56,6 +67,9 @@ def main():
         sim_environment.init_ui_stats_arrays(settings, mesh)
         if (settings.get_T):
             sim_environment.init_T_stats_arrays(settings, mesh)
+            
+        if (settings.compute_spectrums):
+            sim_environment.init_premultiplied_spectrums_ibm(settings, mesh)
         
         print("Computing statistics ...")
         
@@ -66,13 +80,27 @@ def main():
             
             """Compute velocities statistics"""
             sim_environment.compute_basic_stats()
-            sim_environment.compute_vorticity(settings, mesh)
-            sim_environment.compute_transport_equation_terms(settings, mesh)
+            sim_environment.compute_vorticity_sedat(settings, mesh)
+            
+            if (settings.compute_transport_equation_terms):
+                sim_environment.compute_transport_equation_terms_sedat(settings, mesh)
             
             """Compute temperature statistics"""
             if (settings.get_T):
                 sim_environment.compute_basic_thermal_stats()
-                sim_environment.compute_transport_equation_terms_temperature(settings, mesh)
+                                
+                if (settings.compute_transport_equation_terms):
+                    sim_environment.compute_transport_equation_terms_temperature_sedat(settings, mesh)
+                
+            if (settings.compute_spectrums):
+                sim_environment.compute_premultiplied_spectrums_ibm(settings, mesh)
+                
+                if (settings.get_T):
+                    sim_environment.compute_premultiplied_spectrums_temperature_ibm(settings, mesh)
+                
+            """Compute and save Lambda2"""
+            if (settings.compute_lambda2): 
+                sim_environment.compute_lambda2(mesh, settings, sim_environment.Re_tau_spot, t)
         
         print("Statistics computed!")
             
@@ -85,12 +113,21 @@ def main():
         sim_environment.save_basic_velocity_stats(settings, mesh)
         sim_environment.save_reynolds_stresses(settings, mesh)
         sim_environment.save_vorticity(settings, mesh)
-        sim_environment.save_transport_equation_terms(settings, mesh)
+        if (settings.compute_transport_equation_terms):
+            sim_environment.save_transport_equation_terms_sedat(settings, mesh)
         
         """Save temperature statistics"""
         if (settings.get_T):
             sim_environment.save_basic_temperature_stats(settings, mesh)
-            sim_environment.save_transport_equation_terms_temperature(settings, mesh)
+            
+            if (settings.compute_transport_equation_terms):
+                sim_environment.save_transport_equation_terms_temperature_sedat(settings, mesh)
+            
+        if (settings.compute_spectrums):
+            sim_environment.save_premultiplied_spectrums_ibm(settings, mesh)
+            
+            if (settings.get_T):
+                sim_environment.save_premultiplied_spectrums_temperature_ibm(settings, mesh)
         
         print("Statistics saved!")
     
@@ -98,15 +135,17 @@ def main():
     
         """Plot the velocities statistics"""
         plot_stats_utils.read_and_plot_basic_velocity_stats(settings, mesh, plotWithTheo=False)
-        plot_stats_utils.read_and_plot_transport_equation_terms(settings, mesh, plotWithTheo=False)
+        if (settings.compute_transport_equation_terms):
+            plot_stats_utils.read_and_plot_transport_equation_terms(settings, mesh, plotWithTheo=False)
         plot_stats_utils.read_and_plot_vorticity(settings, mesh, plotWithTheo=False)
         plot_stats_utils.read_and_plot_reynolds_stresses(settings, mesh, plotWithTheo=False)
         
         """Plot the temperature statistics"""
-        plot_stats_utils.read_and_plot_basic_temperature_stats(settings, mesh, plotWithTheo=False)
-        plot_stats_utils.read_and_plot_temperature_budgets(settings, mesh, plotWithTheo=False)
-
-
+        if (settings.get_T):
+            plot_stats_utils.read_and_plot_basic_temperature_stats(settings, mesh, plotWithTheo=False)
+            
+            if (settings.compute_transport_equation_terms):
+                plot_stats_utils.read_and_plot_temperature_budgets(settings, mesh, plotWithTheo=False)
 
 
 main()

@@ -39,6 +39,8 @@ class Settings:
         ################        CHOOSING THE SPOT           ###############
         ###################################################################
         self.get_spot_infos()
+        
+        self.get_ibm_infos()
 
         ###################################################################
         ###################### Classical PLOT INFOS #######################
@@ -132,6 +134,9 @@ class Settings:
         self.compute_lambda2 = compute_lambda2
         self.slice_lambda2 = slice_lambda2
 
+        # initialize boolean for spectrums computing
+        self.compute_spectrums = compute_spectrums
+
 
     def get_spot_infos(self):
         """Initialization of the main information of the spot
@@ -147,6 +152,33 @@ class Settings:
         self.x_bounds = x_bounds
         self.y_bounds = y_bounds
         self.z_bounds = z_bounds
+
+
+    def get_ibm_infos(self):
+        """Initialization of the main information of the ibm mask
+        """
+        
+        self.IBM_flag = IBM_flag
+        
+        # initialize parameters for spot/domain in which stats are computed
+        self.i_start = i_start
+        self.i_end = i_end
+        
+        self.j_start = j_start
+        self.j_end = j_end
+        
+        self.k_start = k_start
+        self.k_end = k_end
+        
+        # initialize parameters for spot/domain in which stats are computed
+        self.x_start = x_start
+        self.x_end = x_end
+        
+        self.y_start = y_start
+        self.y_end = y_end
+        
+        self.z_start = z_start
+        self.z_end = z_end
 
 
     def get_stats_computation_infos(self):

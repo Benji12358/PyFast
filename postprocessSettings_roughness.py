@@ -2,25 +2,26 @@
 ################    GENERAL SIMULATION INFOS        ###############
 ###################################################################
 
-# L=32*Pi*H / epsilon=0.14 / theta=0°
-current_path = 'PL_Vortices_LargeEps_fine'                    								# Name of the simulation to post-process
-mean_path = 'Preliminary_Laminar_PFlow'														# Name of the simulation containing mean fields (by default, put same name as simulation to post-process)
-theo_path = 'ReTau_150_PS_Dir'																# Name of the simulation containing theoretical results (by default, leave blank)
-Re = 3000																					# Reynolds number of the simulation
-Pr = 1																						# Prandtl number of the simulation
-deltaT = 0.5                                                                                # Temperature step between the lower and the upper wall
-Lx = 32*np.pi                                                                               # Streamwise length of the simulation
-Lz = 8*np.pi                                                                                # Spanwise length of the simulation
-symmetry = True                                                                             # Flag if the simulation can be considered symmetric in y-direction
-delta_iteration = 5                                                                         # Iteration step for statistics computation
+# CHANNEL RE_TAU = 125, w*=12
+current_path = 'AC_ReTau_125_w12_PSL'                                                         # Name of the simulation to post-process
+mean_path = 'AC_ReTau_125_w12_PSL'                                                            # Name of the simulation containing mean fields (by default, put same name as simulation to post-process)
+theo_path = ''                                                                               # Name of the simulation containing theoretical results (by default, leave blank)
+Re = 1500                                                                                    # Reynolds number of the simulation
+Pr = 1                                                                                       # Prandtl number of the simulation
+deltaT = 0.5                                                                                 # Temperature step between the lower and the upper wall
+Lx = 12.96                                                                                   # Streamwise length of the simulation
+Lz = 2.2                                                                                     # Spanwise length of the simulation
+symmetry = False                                                                             # Flag if the simulation can be considered symmetric in y-direction
+delta_iteration = 5                                                                          # Iteration step for statistics computation
 
-streamwise = 1                                                                         		# Specify the streamwise direction used in MULTIFAST
+streamwise = 1                                                                               # Specify the streamwise direction used in MULTIFAST
 
-preliminary_iterations = 10                                                                 # Number of preliminary iterations (by default set as start iteration)
-number_iteration = 175                                                                      # Total number of iterations 
-
-custom_t = True                                                                            	# Flag if the statistics are compute on a custom time range
-rangeT = [165]                                                                              # Custom time range array (by default set anything)
+preliminary_iterations = 150                                                                 # Number of preliminary iterations (by default set as start iteration)
+number_iteration = 290                                                                       # Total number of iterations 
+                                                                                             
+################
+custom_t = False                                                                            # Flag if the statistics are compute on a custom time range
+rangeT = [130] 
 
 root = '/fsnet/people/arrondea7b/project/21MULTIFAST/Sim_data/'                             # Path that contains the raw results of the simulation
 root_postproc = '/fsnet/people/arrondea7b/project/21MULTIFAST/Sim_data/PostProcessing/'     # Path that will contain the post-processed results of the simulation
@@ -28,41 +29,41 @@ root_postproc = '/fsnet/people/arrondea7b/project/21MULTIFAST/Sim_data/PostProce
 compute_lambda2 = False                                                                     # Flag if lambda2 will be computed
 slice_lambda2 = 64                                                                          # Integer up to which is computed lambda2 (by default computing between 0 and slice_lambda2)
 
-compute_spectrums = False                                                                    # Flag if spectrums will be computed  
+compute_spectrums = True                                                                    # Flag if spectrums will be computed  
 
 ################ For IBM_mask
-IBM_flag = False
+IBM_flag = True 
 
-i_start = [228,740,228,740] 
-i_end = [283,795,283,795]    
-j_start = [0,0,186,186] 
-j_end = [69,69,256,256]   
-k_start = [0,64,64,0] 
-k_end = [63,128,128,63]   
+# CHANNEL RE_TAU = 125, w*=12
+i_start = [238,757,238,757,1276,1795,1276,1795] 
+i_end = [280,799,280,799,1318,1837,1318,1837]    
+j_start = [0,0,131,131,0,0,131,131] 
+j_end = [48,48,180,180,48,48,180,180]   
+k_start = [0,64,64,0,0,64,64,0] 
+k_end = [63,128,128,63,63,128,128,63]   
 
-x_start = [1.08,3.51,1.08,3.51] 
-x_end = [1.35,3.78,1.35,3.78]    
-y_start = [0.0,0.0,1.73,1.73] 
-y_end = [0.27,0.27,2.0,2.0]   
-z_start = [0.0,1.1,1.1,0.0] 
-z_end = [1.1,2.2,2.2,1.1] 
-
+x_start = [1.485,4.725,1.485,4.725,7.965,11.205,7.965,11.205] 
+x_end = [1.755,4.995,1.755,4.995,8.235,11.475,8.235,11.475]    
+y_start = [0,0,1.73,1.73,0,0,1.73,1.73] 
+y_end = [0.27,0.27,2,2,0.27,0.27,2,2]   
+z_start = [0,1.1,1.1,0,0,1.1,1.1,0] 
+z_end = [1.1,2.2,2.2,1.1,1.1,2.2,2.2,1.1]   
 
 ###################################################################
 ################        CHOOSING THE SPOT           ###############
 ###################################################################
 
 ################ For turbulent spot
-total_spot = True                                                                          	# Flag if the total turbulent spot is used (mostly used in transitional flows)
+total_spot = False                                                                          # Flag if the total turbulent spot is used (mostly used in transitional flows)
 heart_spot = False                                                                          # Flag if the core of the turbulent spot is used (mostly used in transitional flows)
 wave_packet_spot = False                                                                    # Flag if the wave packet region of the turbulent spot is used (mostly used in transitional flows)
 
 ################ For any simulations
-total_domain = False                                                                        # Flag if the entire domain is used as a spot
+total_domain = True                                                                         # Flag if the entire domain is used as a spot
 
-x_bounds = [24*np.pi, 32*np.pi]                                                             # Bounds of the spot in the streamwise direction
+x_bounds = [15, 30]                                                             # Bounds of the spot in the streamwise direction
 y_bounds = [0, 2]                                                                           # Bounds of the spot in the vertical direction
-z_bounds = [0, 8*np.pi]                                                                     # Bounds of the spot in the spanwise direction
+z_bounds = [0, 2.2]                                                                     # Bounds of the spot in the spanwise direction
 
 
 ###################################################################
@@ -103,12 +104,12 @@ plot_V_instantaneous = False                                                    
 plot_W_instantaneous = False                                                                # Flag if instantaneous of W will be plotted
 plot_T_instantaneous = False                                                                # Flag if instantaneous of T will be plotted
 
-plot_wall_shear_stress_contours = True                                                     	# Flag if the wall shear stress will be plotted
-plot_wall_temperature_flux_contours = True                                                 	# Flag if the wall temperature flux will be plotted
+plot_wall_shear_stress_contours = False                                                     # Flag if the wall shear stress will be plotted
+plot_wall_temperature_flux_contours = False                                                 # Flag if the wall temperature flux will be plotted
 
 plot_x_equal_to = False                                                                     # Location of the slice that wil be plotted in the ZY configuration (by default set as False)
-plot_y_equal_to = 1                                                                         # Location of the slice that wil be plotted in the XZ configuration (by default set as False)
-plot_z_equal_to = False                                                                     # Location of the slice that wil be plotted in the XY configuration (by default set as False)
+plot_y_equal_to = False                                                                         # Location of the slice that wil be plotted in the XZ configuration (by default set as False)
+plot_z_equal_to = 1.1                                                                     # Location of the slice that wil be plotted in the XY configuration (by default set as False)
 
 colored_contours = False                                                                    # Flag if contours are colored with colormap
 contours = True                                                                             # Flag if contours are plotted with lines
@@ -134,23 +135,3 @@ plot_Nu_evolution = False                                                       
 ##########    Check (DOI: 10.1017/S0022112093001429)      #########
 ###################################################################
 plot_TEHL = False                                                                           # Flag if TEHL plots are used
-
-# plot temporal evolution like Henningson Fig 2
-plot_TEHL_U_fluctuations = False															# Flag if fluctuations of U will be plotted in TEHL way
-plot_TEHL_V_fluctuations = False															# Flag if fluctuations of V will be plotted in TEHL way
-plot_TEHL_W_fluctuations = False															# Flag if fluctuations of W will be plotted in TEHL way
-plot_TEHL_T_fluctuations = False															# Flag if fluctuations of T will be plotted in TEHL way
-
-plot_TEHL_wall_shear_stress_contours = False												# Flag if the wall shear stress will be plotted in TEHL way
-plot_TEHL_wall_temperature_flux_contours = False											# Flag if the wall temperature flux will be plotted in TEHL way
-
-# 1D stats plotting
-plot_TEHL_velocity_stats = False															# Flag if basic velocities stats are plotted in TEHL way
-plot_TEHL_transport_equation_terms = False													# Flag if budgets are plotted in TEHL way
-plot_TEHL_reynolds_stresses = False															# Flag if reynolds stresses stats are plotted in TEHL way
-plot_TEHL_temperature_stats = False															# Flag if basic temperature stats are plotted in TEHL way
-plot_TEHL_temperature_velocity_correlations = False											# Flag if temperature-velocity correlations stats are plotted in TEHL way
-
-time_values = [89,109,129,149]																# Time values at which the stats are plotted
-y_limits = [[-15,15], [-15,15], [-15,15], [-15,15]]											# Y-axis bounds for 2D plots in TEHL way
-x_limits = [[10,45], [15,50], [20,60], [25,70]]												# X-axis bounds for 2D plots in TEHL way

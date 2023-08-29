@@ -99,3 +99,14 @@ class CFD_data:
         """
         
         return np.swapaxes(np.asarray([self.instantaneous[:,j,:] - self.mean_spot[j] for j in range(self.ny)]),0,1)
+        
+    def get_fluctuations_triple_decomp(self):
+        """Getting the fluctuated field (compared to the main of the spot) of a CFD_data object.
+    
+        Returns
+        -------
+        3D numpy array with shape (nz,ny,nx)
+            The fluctuated field of a CFD_data object from its instantaneous and mean part in the spot
+        """
+        
+        return np.swapaxes(np.asarray([self.instantaneous[:,j,:] - self.mean[:,j,:] - self.mean_spot[j] for j in range(self.ny)]),0,1)

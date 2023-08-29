@@ -19,7 +19,7 @@ from utilities import find_nearest, read_h5_file
 
 class CFD_mesh:
     
-    def __init__(self, settings:Settings):
+    def __init__(self, settings:Settings, folder_path='3D'):
         """Initialisation of the CFD_mesh object.
         
         Parameters
@@ -34,9 +34,9 @@ class CFD_mesh:
         """
 
         # get a random field to initialize the mesh key points
-        mean_folder = settings.root + '/' + settings.mean_path + '/' + settings.mean_path + '/Results/3D/field' \
-                    + str(settings.preliminary_iterations*1000)
-    
+        mean_folder = settings.root + '/' + settings.current_path + '/' + settings.current_path + '/Results/' + str(folder_path) + '/field' \
+                    + str(settings.number_iteration*1000)
+                        
         # U (streamwise velocity here)
         U_mean = read_h5_file(mean_folder, 'W', settings.streamwise)
 
@@ -45,10 +45,6 @@ class CFD_mesh:
         self.nz = U_mean.shape[0]
 
         del U_mean
-    
-        if (settings.current_path in ['PL_Vortices_LargeEps_fine', 'PL_Vortices_LargeEps_Ka']):
-            self.nx = self.nx*2
-            self.nz = self.nz*2
 
         self.X=np.linspace(0,settings.Lx,self.nx+1) # spanwise coordinates          
         self.Z=np.linspace(0,settings.Lz,self.nz+1) # streamwise coordinates
@@ -77,8 +73,42 @@ class CFD_mesh:
         ##################
         shift = settings.shift
         settings.shift = find_nearest(self.Xc, shift)
-        self.Xc = self.Xc + shift
+        # self.Xc = self.Xc + shift
 
         self.XY,self.YX = np.meshgrid(self.Xc,self.Yc)
-        self.XZ,self.ZX = np.meshgrid(self.Xc,self.Zc-self.Zc[self.nz//2])
-        self.ZY,self.YZ = np.meshgrid(self.Zc-self.Zc[self.nz//2],self.Yc)
+        self.XZ,self.ZX = np.meshgrid(self.Zc-settings.Lz/2,self.Xc)
+        self.ZY,self.YZ = np.meshgrid(self.Zc-settings.Lz/2,self.Yc)
+        
+        ##################
+        self.length_x = np.arange(1,np.floor(self.nx/2),dtype="int")
+        # self.length_x = np.arange(1,2*np.floor(self.nx/4)+1,dtype="int")
+        self.width_x = self.nx
+        
+        
+    def update_mesh(self, settings:Settings):
+        
+        if (settings.total_domain==False):
+            
+            self.xs = find_nearest(self.Xc, settings.x_bounds[0])
+            self.xe = find_nearest(self.Xc, settings.x_bounds[1])
+            
+            self.ys = find_nearest(self.Yc, settings.y_bounds[0])
+            self.ye = find_nearest(self.Yc, settings.y_bounds[1])
+            
+            self.zs = find_nearest(self.Zc, settings.z_bounds[0])
+            self.ze = find_nearest(self.Zc, settings.z_bounds[1])
+            
+        else:
+            
+            self.xs = 0
+            self.xe = self.nx
+            
+            self.ys = 0
+            self.ye = self.ny
+            
+            self.zs = 0
+            self.ze = self.nz
+            
+        self.size_x = self.xe - self.xs
+        self.size_y = self.ye - self.ys
+        self.size_z = self.ze - self.zs

@@ -60,6 +60,8 @@ def main():
             
                 sim_environment.set_mean_spot(settings, mesh)
                 sim_environment.compute_basic_stats()
+                
+                sim_environment.save_wall_UQ_stats(settings, mesh, t)
                     
                 if (settings.compute_velocity_stats):
                     sim_environment.save_basic_velocity_stats(settings, mesh, t)
@@ -87,6 +89,8 @@ def main():
             
                 sim_environment.set_mean_thermal_spot(settings, mesh)
                 sim_environment.compute_basic_thermal_stats()
+                
+                sim_environment.save_wall_TQ_stats(settings, mesh, t)
                     
                 if (settings.compute_temperature_stats):
                     sim_environment.save_basic_temperature_stats(settings, mesh, t)

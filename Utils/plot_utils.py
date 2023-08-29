@@ -77,9 +77,12 @@ def plot_2D_XZ(arrayToShow, yValue, mesh:CFD_mesh, settings:Settings):
     if settings.colored_contours:
         fig.add_contourf(mesh.ZX,mesh.XZ,np.transpose(arrayToShow[:,find_nearest(mesh.Yc, yValue),:]), cmap='seismic')
 
-    fig.chg_x_axis(r'$X$',axis_low_bound=0,axis_high_bound=mesh.Zc[mesh.nz-1]+(mesh.Zc[1]-mesh.Zc[0])/2)
-    fig.chg_y_axis(r'$Z$',axis_low_bound=mesh.Xc[0]-mesh.X[mesh.nx//2 + 1],axis_high_bound=mesh.Xc[-1]-mesh.X[mesh.nx//2 + 1])
+    fig.chg_x_axis(r'$X$',axis_low_bound=mesh.Xc[0],axis_high_bound=mesh.Xc[-1])
+    fig.chg_y_axis(r'$Z$',axis_low_bound=-settings.Lz/2,axis_high_bound=settings.Lz/2)
     fig.custom_layout()
+    fig.add_colorbar('horizontal')
+    fig.add_ticks_x()
+    fig.add_ticks_y()
     fig.display()
 
 def plot_2D_ZY(arrayToShow, xValue, mesh:CFD_mesh, settings:Settings):
@@ -167,17 +170,17 @@ def plot_2D_contours(array3D, arrayName, mesh:CFD_mesh, settings:Settings):
 
     if (type(settings.plot_x_equal_to) != bool):
 
-        plot_2D_ZY(array3D, settings.plot_x_equal_to)
+        plot_2D_ZY(array3D, settings.plot_x_equal_to, mesh, settings)
         print_infos(array3D[:,:,find_nearest(mesh.Zc, settings.plot_x_equal_to)], arrayName)
 
     if (type(settings.plot_y_equal_to) != bool):
 
-        plot_2D_XZ(array3D, settings.plot_y_equal_to)
+        plot_2D_XZ(array3D, settings.plot_y_equal_to, mesh, settings)
         print_infos(array3D[:,find_nearest(mesh.Yc, settings.plot_y_equal_to),:], arrayName)
 
     if (type(settings.plot_z_equal_to) != bool):
 
-        plot_2D_XY(array3D, settings.plot_z_equal_to)
+        plot_2D_XY(array3D, settings.plot_z_equal_to, mesh, settings)
         print_infos(array3D[find_nearest(mesh.Xc, settings.plot_z_equal_to),:,:], arrayName)
         
 
@@ -197,10 +200,14 @@ def plot_2D_contours_with_spot(array2D, spot2D, mesh:CFD_mesh, settings:Settings
             
     """
 
-    fig = CFD_plot('full')
-    fig.add_contourf(mesh.XZ,mesh.ZX,array2D, cmap='seismic')
-    fig.add_contour(mesh.XZ,mesh.ZX,spot2D, cmap='binary', linewidths=2)
+    fig = CFD_plot('full', mydpi=300)
+    fig.add_contourf(mesh.ZX,mesh.XZ,np.transpose(array2D), cmap='seismic')
+    fig.add_contour(mesh.ZX,mesh.XZ,np.transpose(spot2D), cmap='binary', linewidths=2, linestyles='--')
     fig.chg_x_axis(r'$X$',axis_low_bound=mesh.Xc[0],axis_high_bound=mesh.Xc[-1])
-    fig.chg_y_axis(r'$Z$',axis_low_bound=0-settings.Lz/2,axis_high_bound=settings.Lz-settings.Lz/2)
+    fig.chg_y_axis(r'$Z$',axis_low_bound=-settings.Lz/2,axis_high_bound=settings.Lz/2)
     fig.custom_layout()
+    fig.add_ticks_x()
+    fig.add_ticks_y()
+    fig.add_colorbar('horizontal')
+    fig.saveAsPDF('/fsnet/people/arrondea7b/project/21MULTIFAST/Article/New_shot/', 'test')
     fig.display()
